@@ -1,0 +1,303 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+{{ 'ss-featured-product-1.css' | asset_url | stylesheet_tag }}
+{% style %}
+    #shopify-section-{{ section.id }} {
+        --ss-sectiob-background: {{ section.settings.section_bg.red }}, {{ section.settings.section_bg.green }}, {{ section.settings.section_bg.blue }};
+        --ss-section-product-card-bg: {{ section.settings.product_card_bg.red }}, {{ section.settings.product_card_bg.green }}, {{ section.settings.product_card_bg.blue }};
+        --ss-section-padding-block: {{ section.settings.section_padding_block.red }}, {{ section.settings.section_padding_block.green }}, {{ section.settings.section_padding_block.blue }};
+        --ss-title-color: {{ section.settings.title_color.red }}, {{ section.settings.title_color.green }}, {{ section.settings.title_color.blue }};
+        --ss-button-text-color: {{ section.settings.button_text_color.red }}, {{ section.settings.button_text_color.green }}, {{ section.settings.button_text_color.blue }};
+        --ss-button-circle-color: {{ section.settings.button_circle_bg.red }}, {{ section.settings.button_circle_bg.green }}, {{ section.settings.button_circle_bg.blue }};
+    }
+{% endstyle %}
+<div class="ss-inner-container">    
+    <div class="ss-top-area">
+        <h2 class="ss-main-title">
+            Best Sellers
+        </h2>
+        <a href="">
+            View All
+            <span class="ss-circle">
+                <svg role="presentation" focusable="false" width="5" height="8" class="icon icon-chevron-right-small reverse-icon" viewBox="0 0 5 8">
+                    <path d="m.75 7 3-3-3-3" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                </svg>
+            </span>
+        </a>
+    </div>
+    <smart-slider>
+        <div class="swiper ss-swiper" id="swiper-{{ section.id }}">
+            {% assign productIndex = 1 %}
+            <div class="swiper-wrapper">
+                {% if section.settings.all_product != blank %}
+                    {% for product in section.settings.all_product %}
+                        {% assign product_name = 'product-' | append: productIndex %}
+                            <div class="swiper-slide">
+                                <a href="{{ product.url }}">
+                                    <div class="media-wrapper ss-skeleton">
+                                        {% if product.featured_image != blank  %}
+                                            <img 
+                                                class="ss-image lazyload"
+                                                src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'></svg>"
+                                                data-src="{{ product.featured_image | img_url: '500x' }}"
+                                                alt="{{ product.title }}"
+                                                loading="lazy"
+                                                width="500"
+                                                height="500"
+                                            >
+                                        {% else %}
+                                            {{ product_name | placeholder_svg_tag }}    
+                                        {% endif %}
+                                    </div>
+                                    <div class="ss-title-wrapper">
+                                        <h3>{{ product.title }}</h3>
+                                        <p class="price">
+                                            {{product.price | money }}
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% if productIndex == 6 %}
+                            {% assign productIndex = 1 %}
+                        {% endif %}   
+                        {% assign productIndex = productIndex | plus: 1 %}
+                    {% endfor %}
+                {% elsif section.settings.collection != blank %}
+                    {% for product in section.settings.collection.products %}
+                        {% assign product_name = 'product-' | append: productIndex %}
+                        <div class="swiper-slide">
+                            <a href="{{ product.url }}">
+                                <div class="media-wrapper ss-skeleton">
+                                    {% if product.featured_image != blank  %}
+                                        <img 
+                                            class="ss-image lazyload"
+                                            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'></svg>"
+                                            data-src="{{ product.featured_image | img_url: '500x' }}"
+                                            alt="{{ product.title }}"
+                                            loading="lazy"
+                                            width="500"
+                                            height="500"
+                                        >
+                                    {% else %}
+                                        {{ product_name | placeholder_svg_tag }}    
+                                    {% endif %}
+                                </div>
+                                <div class="ss-title-wrapper">
+                                    <h3>{{ product.title }}</h3>
+                                    <p class="price">
+                                        {{product.price | money }}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        {% if productIndex == 6 %}
+                            {% assign productIndex = 1 %}
+                        {% endif %}   
+                        {% assign productIndex = productIndex | plus: 1 %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="swiper-pagination swiper-pagination-{{ section.id }}"></div>
+            <div class="swiper-button-prev swiper-button-prev-{{ section.id }}"></div>
+            <div class="swiper-button-next swiper-button-next-{{ section.id }}"></div>
+        </div>
+        <script type="application/json">
+            { 
+                "slidesPerView": 4,
+                "spaceBetween": 10,
+                "pagination": {
+                    "enabled": false,
+                    "el": ".swiper-pagination-{{ section.id }}"
+                },
+                "navigation": {
+                  "nextEl": ".swiper-button-next-{{ section.id }}",
+                  "prevEl": ".swiper-button-prev-{{ section.id }}"
+                }, 
+                "breakpoints": {
+                    "0": {
+                        "slidesPerView": 1,
+                        "spaceBetween": 10,
+                        "navigation": {
+                            "enabled": false
+                        },
+                        "pagination": {
+                            "enabled": true
+                        }
+                    },
+                    "340": {
+                        "slidesPerView": 2,
+                        "spaceBetween": 10,
+                        "navigation": {
+                            "enabled": false
+                        },
+                        "pagination": {
+                            "enabled": true
+                        }
+                    },
+                    "768": {
+                        "slidesPerView": 3,
+                        "spaceBetween": 10,
+                        "navigation": {
+                            "enabled": true
+                        },
+                        "pagination": {
+                            "enabled": false
+                        }
+                    },
+                    "1024": {
+                        "slidesPerView": 4,
+                        "spaceBetween": 10,
+                        "navigation": {
+                            "enabled": true
+                        },
+                        "pagination": {
+                            "enabled": false
+                        }
+                    },
+                    "1440": {
+                        "slidesPerView": 4,
+                        "spaceBetween": 30,
+                        "navigation": {
+                            "enabled": true
+                        },
+                        "pagination": {
+                            "enabled": false
+                        }
+                    } 
+                }
+            }
+        </script>
+    </smart-slider>
+</div>
+
+<script defer>
+    if (!customElements.get('smart-slider')) {
+        class SmartSlider extends HTMLElement {
+            constructor() {
+                super();
+                this.config = JSON.parse(this.querySelector('script[type="application/json"]').innerHTML);
+                this.swiper = new Swiper(this.querySelector('.ss-swiper'), this.config);
+                console.log(this.config);
+
+                this.imagesInitialized = false; // Avoid repeated calls
+
+                this.initObserver(); // Use IntersectionObserver
+            }
+
+            initObserver = () => {
+                const observer = new IntersectionObserver((entries, observerInstance) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !this.imagesInitialized) {
+                            this.initImages();
+                            this.imagesInitialized = true;
+                            observerInstance.unobserve(this); // Stop observing after first load
+                        }
+                    });
+                }, {
+                    root: null,
+                    threshold: 0.1
+                });
+
+                observer.observe(this);
+            }
+
+            initImages = () => {
+                const lazyImages = this.querySelectorAll("img.lazyload");
+                lazyImages.forEach(img => {
+                    const dataSrc = img.getAttribute("data-src");
+                    if (dataSrc) {
+                        img.setAttribute("src", dataSrc);
+                        img.onload = function () {
+                            img.setAttribute("data-loaded", "true");
+                            img.parentElement.classList.remove("ss-skeleton");
+                        };
+                    }
+                });
+            }
+        }
+
+        customElements.define('smart-slider', SmartSlider);
+    }
+</script>
+
+{% schema %}
+{
+    "name": "SS Featured Product 1",
+    "class": "ss-featured-product-1",
+    "presets": [
+        {
+            "name":"SS Featured Product 1"
+        }
+    ],
+    "blocks": [],
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Best Seller"
+        },
+        {
+            "type": "color",
+            "id": "title_color",
+            "label": "Title Color",
+            "default": "#000000"
+        },
+        {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "View all"
+        },
+        {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button Url"
+        },
+        {
+            "type": "color",
+            "id": "button_text_color",
+            "label": "Button Text Color",
+            "default": "#000000"
+        },
+        {
+            "type": "color",
+            "id": "button_circle_bg",
+            "label": "Button Circle Background",
+            "default": "#CCCCCC"
+        },
+        {
+            "type": "product_list",
+            "id": "all_product",
+            "label": "Choose Products"
+        },
+        {
+            "type": "collection",
+            "id": "collection",
+            "label": "Choose Collection"
+        },
+        {
+            "type": "color",
+            "id": "section_bg",
+            "label": "Section Bckground",
+            "default": "#F0F0F0"
+        },
+        {
+            "type": "color",
+            "id": "product_card_bg",
+            "label": "Product Card Background",
+            "default": "#FFFFFF"
+        },
+        {
+            "type": "range",
+            "id": "section_padding_block",
+            "label": "Section Padding Block",
+            "unit": "px",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "default": 80
+        }
+    ]
+}
+{% endschema %}
